@@ -1,0 +1,8 @@
+{
+    "enable" : true,
+    "env":
+    [
+        {"HOUDINI_PATH" : "$HOUDINI_PACKAGE_PATH/../elTween"}
+
+    ]
+}

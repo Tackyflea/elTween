@@ -15,7 +15,8 @@ eltween = None
 def onCreateInterface():  
     importlib.reload(eltweener)
     global eltween
-    eltween = eltweener.eltween()   
+    eltween = eltweener.eltween()  
+    
     eltween.setCurrentPaneTab(kwargs["paneTab"])
     layout = eltween.createLayout() 
     return layout

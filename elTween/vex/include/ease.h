@@ -1,3 +1,12 @@
+float tpmt(float x){ return (pow(2, -10 * x) - 0.0009765625) * 1.0009775171065494; }; // used for elastic
+
+ float bEaseOut(float t){
+        float b1 = 4 / (float)11, b2 = (float)6 / (float)11, b3 = (float)8 / (float)11,
+        b4 = (float)3 / (float)4, b5 = (float)9 / (float)11, b6 = (float)10 / (float)11,
+        b7 = (float)15 / (float)16, b8 = (float)21 / (float)22, b9 = (float)63 / (float)64;
+        float   b0 = 1 / b1 / b1;
+       return (t = +t) < b1 ? b0 * t * t : t < b3 ? b0 * (t -= b2) * t + b4 : t < b6 ? b0 * (t -= b5) * t + b7 : b0 * (t -= b8) * t + b9;
+}; //used for bounce
 float ease(string type; float t; float props[]; float time)
 {
   //  if(t>1){t=1;};if(t<0){t=0;};
@@ -79,59 +88,52 @@ float ease(string type; float t; float props[]; float time)
   }
   else if (type == "ElasticOut")
   {
-    float s1;
-    if (t == 0)  return 0;
-    if ((t /= 1) == 1)  return 1;
-    if (props[1] == 0)  props[1] = 1 * 0.3;
-    if (props[0] < 1)
-    {  props[0] = 1;  s1 = props[1] / 4;
-    }
-    else s1 = props[1] / PI * 2 * (float)asin(1 / props[0]);
-    return (props[0] * (float)pow(2, -10 * t) * (float)sin((t - s1) * PI * 2 / props[1]) + 1);
+    float p = props[0], a = props[1];
+    float s = asin(1 / (a = max(1, a))) * (p /= PI*2);
+    return 1 - a * tpmt(t = +t) * sin((t + s) / p);
   }
   else if (type == "ElasticIn")
   {
-    float s0;
-    if (t == 0)  return 0;
-    if (t == 1)  return 1;
-    if (props[1] == 0)  props[1] = 0.3f;
-    if (props[0] < 1)
-    {  props[0] = 1;
-      s0 = props[1] / 4;
-    }
-    else s0 = props[1] / PI * 2 * (float)asin(1 / props[0]);
-    return -(props[0] * (float)pow(2, 10 * (t -= 1)) * (float)sin((t - s0) * PI * 2 / props[1]));
+    float p = props[0], a = props[1];
+    float s = asin(1 / (a = max(1, a))) * (p /= PI*2);
+    return a * tpmt(-(--t)) * sin((s - t) / p);
   }
   else if (type == "ElasticInOut")
   {
 
-    float s;
-    if (t == 0) return 0;
-    if (t * 0.5f == 2) return 1;
-    if (props[1] == 0) props[1] = 0.3 * 1.5;
-    if (props[0] < 1)
-    { props[0] = 1; s = props[1] / 4;
-    }
-    else s = props[1] / PI * 2 * (float)asin(1 / props[0]);
-    if (t < 1)
-      return -0.5f * (props[0] * (float)pow(2, 10 * (t -= 1)) * (float)sin((t - s) * PI * 2 / props[1]));
-    return props[0] * (float)pow(2, -10 * (t -= 1)) * (float)sin((t - s) * PI * 2 / props[1]) * 0.5f + 1;
+    float p = props[0], a = props[1];
+    float s = asin(1 / (a = max(1, a))) * (p /= PI*2);
+    return ((t = t * 2 - 1) < 0
+      ? a * tpmt(-t) * sin((s - t) / p)
+      : 2 - a * tpmt(t) * sin((s + t) / p)) / 2;
   }
   else if (type == "BounceIn")
   {
-    return (t - 1) * t * ((props[0] + 1) * t - props[0]);
+    float bT = 1-t;
+   return 1-bEaseOut(bT) ;
   }
   else if (type == "BounceOut")
   {
-    return ((t = t / 1 - 1) * t * ((props[0] + 1) * t + props[0]) + 1);
+    return bEaseOut(t);
   }
   else if (type == "BounceInOut")
   {
-    if ((t /= 1 * 0.5f) < 1)
-    {
-      return 0.5 * (t * t * (((props[0] *= (1.525)) + 1) * t - props[0]));
-    }
-    return 0.5 * ((t -= 2) * t * (((props[0] *= (1.525)) + 1) * t + props[0]) + 2);
+    float bT = 1-t;
+      float bT2 = t-1;
+      return ((t *= 2) <= 1 ? 1 - bEaseOut(bT) : bEaseOut(bT2) + 1) / 2;
+  }
+  else if (type == "BackIn")
+  {
+    return (t = +t) * t * (abs(props[0]) * (t - 1) + t);
+  }
+  else if (type == "BackOut")
+  {
+    return --t * t * ((t + 1) * abs(props[0]) + t) + 1;
+  }
+  else if (type == "BackInOut")
+  {
+    float s = abs(props[0]);
+    return ((t *= 2) < 1 ? t * t * ((s + 1) * t - s) : (t -= 2) * t * ((s + 1) * t + s) + 2) / 2;
   }
   else
   {
