@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="eltween" label="El Tween" icon="MISC_python" showNetworkNavigationBar="false" help_url="">
+    <script><![CDATA[from elTween import eltweener
+import importlib
+importlib.reload(eltweener)
+ 
+eltween = None
+
+def onCreateInterface():  
+    importlib.reload(eltweener)
+    global eltween
+    eltween = eltweener.eltween()   
+    eltween.setCurrentPaneTab(kwargs["paneTab"])
+    layout = eltween.createLayout() 
+    return layout
+     
+            
+def onNodePathChanged(node): 
+    importlib.reload(eltweener)
+    if node.type().name().startswith("elTween"):
+        global eltween
+        if eltween is not None:
+            importlib.reload(eltweener)
+            eltween.setCurrentNode(node) 
+            eltween.setCurrentPaneTab(kwargs['paneTab'])  ]]></script>
+    <includeInToolbarMenu menu_position="423" create_separator="false"/>
+    <showInParametersPane optype="Sop/elTween::1.0"/>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>
