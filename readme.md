@@ -18,19 +18,19 @@ Copy the folder `elTween` to your **houdin20.0/** `folder` in your My Documents 
 
 Press Tab, type in el Tween and place it under your object you want to animate. Then hit the big buttons on the left for Position/Rotation/Scale/Skew Or their tiny versions on the right for using only one axis. That's pretty much it!
 
-![](https://public-files.gumroad.com/g701rll8275jbcjo9ujh11kr118s)
+![](/images/image1.gif)
 
 ### Easing:
 
 I've added Easing options including your standard eases, in out, and also Elastic and Bounce which can be controlled by the Overshoot and Amplitude sliders
 
-![](https://public-files.gumroad.com/fbkja0rcyv7ec4jy3qo586ru7yua)
+![](/images/image2.gif)
 
 ### Staggers:
 
 Because of the fact that elTween is point based not packed object based you can Stagger on the stagger tab. Specify the amount and the pivot of the stagger(how far away the stagger point is from the center of the object) and you can make some nice smear action!
 
-![](https://public-files.gumroad.com/xz8nez9c9z1fx3ofs74gzaumwxri)
+![](/images/image3.gif)
 
 
 
